@@ -31,13 +31,13 @@ if len(allocations) > 0:
     mb16 = sum(map(lambda x: x < 8*ONEMB, allocations))
     mb32 = sum(map(lambda x: x < 16*ONEMB, allocations))
     mbMax = sum(map(lambda x: x >= 16*ONEMB, allocations))
-
-    print(f"{mb2/total:.2%} would not be humongous with a 2mb region size (-XX:G1HeapRegionSize)")
-    print(f"{mb4/total:.2%} would not be humongous with a 4mb region size")
-    print(f"{mb8/total:.2%} would not be humongous with a 8mb region size")
-    print(f"{mb16/total:.2%} would not be humongous with a 16mb region size")
-    print(f"{mb32/total:.2%} would not be humongous with a 32mb region size")
-    print(f"{mb32/total:.2%} would remain humongous with a 32mb region size")
+    # print(mb2, mb4, mb8, mb16, mb32, mbMax)
+    print(f"{(mb2/total):.2%} would not be humongous with a 2mb region size (-XX:G1HeapRegionSize)")
+    print(f"{(mb4/total):.2%} would not be humongous with a 4mb region size")
+    print(f"{(mb8/total):.2%} would not be humongous with a 8mb region size")
+    print(f"{(mb16/total):.2%} would not be humongous with a 16mb region size")
+    print(f"{(mb32/total):.2%} would not be humongous with a 32mb region size")
+    print(f"{mbMax/total:.2%} would remain humongous with a 32mb region size")
 
 
 #Total created bytes 	1.88 gb
