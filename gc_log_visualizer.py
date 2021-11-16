@@ -2,9 +2,9 @@
 
 import sys
 import re
-import tempfile
 import os
 import dateutil.parser
+
 
 class StwSubTimings:
   def __init__(self):
@@ -23,6 +23,7 @@ class StwSubTimings:
       return int((total * 1000) - self.ext_root_scan - self.update_rs - self.scan_rs - self.object_copy - self.termination - self.other)
     else:
       return 0
+
 
 class LogParser:
   heapG1GCPattern = '\s*\[Eden: ([0-9.]+)([BKMG])\(([0-9.]+)([BKMG])\)->[0-9.BKMG()]+ Survivors: ([0-9.]+)([BKMG])->([0-9.]+)([BKMG]) Heap: ([0-9.]+)([BKMG])\([0-9.BKMG]+\)->([0-9.]+)([BKMG])\([0-9.BKMG]+\)'
@@ -71,7 +72,7 @@ class LogParser:
     self.full_gc = False
     self.gc = False
     self.root_scan_start_time = 0
-    self.root_scan_end_timestamp = 0
+    self.root_scan_end_timestamp = None
     self.root_scan_mark_end_time = 0
     self.mixed_duration_start_time = 0
     self.mixed_duration_count = 0
@@ -348,7 +349,7 @@ class LogParser:
     
   def output_data(self):
     if self.mixed_duration_count == 0:
-      self.young_pause_file.write("%s %.6f\n" % (self.timestamp_string(), self.pause_time))
+      self.young_pause_file.write(f"{self.timestamp_string()} {self.pause_time}.6f\n")
     else:
       self.mixed_pause_file.write("%s %.6f\n" % (self.timestamp_string(), self.pause_time))
 
