@@ -1,7 +1,7 @@
 //usr/bin/env jshell --show-version --execution local '-J-Xlog:gc+ergo*=trace:/tmp/gc.log' "$0" "$@"; exit $?
 
 /*
-  usage:  jshell '-J-Xlog:gc*=trace:/tmp/gclog.log' --execution local GCAllocationTest.jsh
+  usage:  jshell '-J-Xlog:gc*=trace:/tmp/gc.log' --execution local GCAllocationTest.jsh
 */
 
 import java.util.stream.IntStream; 
