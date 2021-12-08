@@ -27,8 +27,16 @@ found 858 humongous objects in /tmp/gc.log
 
 # GC Log Preparation
 
-The script has been run on ParallelGC and G1GC logs. There may be some oddities/issues with ParallelGC as profiling it hasn't proven overly useful.
+The script is for G1GC logs. 
 
 The following gc params are required for full functionality.
 
+java 8:
+
 `-XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime -XX:+PrintAdaptiveSizePolicy`
+
+Java 9:
+
+`-Xlog:gc*`
+
+
