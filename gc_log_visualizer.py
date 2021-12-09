@@ -25,6 +25,13 @@ class StwSubTimings:
     else:
       return 0
 
+/*
+Java 8 G1GC
+    [Eden: 7136.0M(7136.0M)->0.0B(10.2G) Survivors: 200.0M->184.0M Heap: 13.3G(24.0G)->6510.3M(24.0G)]
+    2021-12-06T11:07:59.127-0500: 2392835.650: [GC concurrent-root-region-scan-start]
+    2021-12-06T11:08:00.089-0500: 2392836.613: [GC concurrent-mark-end, 0.8779976 secs]
+    2021-12-06T11:08:01.446-0500: 2392837.970: [GC concurrent-cleanup-end, 0.0409477 secs]
+*/
 
 class LogParser:
   heapG1GCPattern = '\s*\[Eden: ([0-9.]+)([BKMG])\(([0-9.]+)([BKMG])\)->[0-9.BKMG()]+ Survivors: ([0-9.]+)([BKMG])->([0-9.]+)([BKMG]) Heap: ([0-9.]+)([BKMG])\([0-9.BKMG]+\)->([0-9.]+)([BKMG])\([0-9.BKMG]+\)'
