@@ -14,6 +14,14 @@ allocations = []
 total = 0
 
 for line in f.read().splitlines():
+    if (maxheap == None and re.search("CommandLine flags",line) != None):
+        maxheap = re.search("-XX:MaxHeapSize=[0-9]+", line).group()
+        sizepolicy = re.search("-XX:+PrintAdaptiveSizePolicy", line)
+        if (sizepolicy == None):
+            print("please enable logs with -XX:+PrintAdaptiveSizePolicy")
+            exit(0)
+        print(f"maxheap: {maxheap}")
+        
     if re.search("allocation request:.*source: concurrent humongous allocation", line) is not None:
         total += 1
         req = re.search("allocation request: [0-9]+", line).group()
