@@ -16,7 +16,7 @@ total = 0
 for line in f.read().splitlines():
     if (maxheap == None and re.search("CommandLine flags",line) != None):
         maxheap = re.search("-XX:MaxHeapSize=[0-9]+", line).group()
-        sizepolicy = re.search("-XX:+PrintAdaptiveSizePolicy", line)
+        sizepolicy = re.search("-XX:\+PrintAdaptiveSizePolicy", line)
         if (sizepolicy == None):
             print("please enable logs with -XX:+PrintAdaptiveSizePolicy")
             exit(0)
@@ -24,7 +24,7 @@ for line in f.read().splitlines():
         
     if re.search("allocation request:.*source: concurrent humongous allocation", line) is not None:
         total += 1
-        req = re.search("allocation request: [0-9]+", line).group()
+        req = re.search("allocationhttps://jiradc-gti.jpmchase.net/secure/RapidBoard.jspa?rapidView=63346 request: [0-9]+", line).group()
         allocations.append(int(re.search(r"[0-9]+", req).group()))
 
 print(f"found {total} humongous objects in {log}")
