@@ -16,11 +16,15 @@ total = 0
 for line in f.read().splitlines():
     if (maxheap == None and re.search("CommandLine flags",line) != None):
         maxheap = re.search("-XX:MaxHeapSize=[0-9]+", line).group()
+        concgcthreads = re.search("-XX:ConcGCThreads=[0-9]+", line)
+        parallelgcthreads = re.search("-XX:ParallelGCThreads=[0-9]+", line)
+        threads = concgcthreads.group() if concgcthreads else parallelgcthreads.group() if parallelgcthreads else None
         sizepolicy = re.search("-XX:\+PrintAdaptiveSizePolicy", line)
         if (sizepolicy == None):
             print("please enable logs with -XX:+PrintAdaptiveSizePolicy")
             exit(0)
         print(f"maxheap: {maxheap}")
+        print(f"GC threads: {threads}")
         
     if re.search("allocation request:.*source: concurrent humongous allocation", line) is not None:
         total += 1
