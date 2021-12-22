@@ -27,11 +27,16 @@ def parseTimes(line):
     pass
 
 def plotTimes(line):
+    """
+    [Times: user=0.01 sys=0.00, real=0.01 secs]
+    """
     pass
 
 def parseGenerations(line):
     """
     Parses an input line from gc.log into a set of tokens and returns them
+
+    Java 8:  [Eden: 26.0M(26.0M)->0.0B(30.0M) Survivors: 5120.0K->3072.0K Heap: 51.4M(64.0M)->22.6M(64.0M)]
     """
     generations = re.match(".*Eden:\s(\d+.\d+)(\w).*Survivors:\s(\d+.\d+)(\w).*Heap:\s(\d+.\d+)(\w)", line)
     if generations:
