@@ -13,6 +13,40 @@ f = open(log)
 allocations = []
 total = 0
 
+timeUser=[]
+timeSys=[]
+timeReal=[]
+
+szEden=[]
+szSurvivors=[]
+szHeap=[]
+
+maxheap=None
+units= { 'K' : 1_000, 'M' : 1_000_000, 'G' : 1_000_000_000 }
+def parseTimes(line):
+    pass
+
+def plotTimes(line):
+    pass
+
+def parseGenerations(line):
+    """
+    Parses an input line from gc.log into a set of tokens and returns them
+    """
+    generations = re.match(".*Eden:\s(\d+.\d+)(\w).*Survivors:\s(\d+.\d+)(\w).*Heap:\s(\d+.\d+)(\w)", line)
+    if generations:
+        eden, survivors, heap = round(float(generations.group(1))), round(float(generations.group(3))),
+        round(float(generations.group(5)))
+        print(eden, survivors, heap)
+        return eden*units[generations.group(2)], survivors*units[generations.group(4)], heap**units[generations.group(6)]
+
+def plotGenerations(eden, survivors, heap):
+    import plotly.express as px
+    import pandas as pd
+    df = pd.DataFrame.from_dict({"eden" : eden, "survivors" : survivors, "total_heap" : heap})
+    fig = px.line(df, x=df.index, y=[df.eden, df.survivors, df.total_heap], title='Generation Size')
+    fig.show()
+
 for line in f.read().splitlines():
     if (maxheap == None and re.search("CommandLine flags",line) != None):
         maxheap = re.search("-XX:MaxHeapSize=[0-9]+", line).group()
@@ -30,6 +64,20 @@ for line in f.read().splitlines():
         total += 1
         req = re.search("allocation request: [0-9]+", line).group()
         allocations.append(int(re.search(r"[0-9]+", req).group()))
+
+    time = parseTimes(line)
+    if time:
+        user, sys, real = time
+        timeUser.append(user)
+        timeSys.append(sys)
+        timeReal.append(real)
+
+    generations = parseGenerations(line)
+    if generations:
+        eden, survivors, heap = generations
+        szEden.append(eden)
+        szSurvivors.append(survivors)
+        szHeap.append(heap)
 
 print(f"found {total} humongous objects in {log}")
 
@@ -56,4 +104,3 @@ if len(allocations) > 0:
 #Total promoted bytes 	n/a
 #Avg creation rate 	4.33 mb/sec
 #Avg promotion rate 	n/a
-
