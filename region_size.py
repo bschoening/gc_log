@@ -23,14 +23,24 @@ szHeap=[]
 
 maxheap=None
 units= { 'K' : 1_000, 'M' : 1_000_000, 'G' : 1_000_000_000 }
+
 def parseTimes(line):
-    pass
+    times = re.match(".*Times.*?user=(\d+.\d+)\ssys=(\d+.\d+.),\sreal=(\d+.\d+)", line)
+    if times:
+        user, sys, real = float(times.group(1)), float(times.group(2)), float(times.group(3))
+        print(user, sys, real)
+        return user, sys, real
 
 def plotTimes(line):
     """
     [Times: user=0.01 sys=0.00, real=0.01 secs]
     """
-    pass
+    import plotly.express as px
+    import pandas as pd
+    df = pd.DataFrame.from_dict({"user" : tuser, "system" : tsys, "real" : treal })
+    fig = px.line(df, x=df.index, y=[df.user, df.system, df.real], title='GC Timming',
+            labels={'value':'time in seconds'}, log_y=true)
+    fig.show()
 
 def parseGenerations(line):
     """
