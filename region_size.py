@@ -25,13 +25,13 @@ maxheap=None
 units= { 'K' : 1_000, 'M' : 1_000_000, 'G' : 1_000_000_000 }
 
 def parseTimes(line):
-    times = re.match(".*Times.*?user=(\d+.\d+)\ssys=(\d+.\d+.),\sreal=(\d+.\d+)", line)
+    times = re.match(".*Times.*?user=(\d+.\d+)\ssys=(\d+.\d+),\sreal=(\d+.\d+)", line)
     if times:
         user, sys, real = float(times.group(1)), float(times.group(2)), float(times.group(3))
         print(user, sys, real)
         return user, sys, real
 
-def plotTimes(line):
+def plotTimes(tuser, tsys, treal):
     """
     [Times: user=0.01 sys=0.00, real=0.01 secs]
     """
@@ -39,7 +39,7 @@ def plotTimes(line):
     import pandas as pd
     df = pd.DataFrame.from_dict({"user" : tuser, "system" : tsys, "real" : treal })
     fig = px.line(df, x=df.index, y=[df.user, df.system, df.real], title='GC Timming',
-            labels={'value':'time in seconds'}, log_y=true)
+            labels={'value':'time in seconds'}, log_y=True)
     fig.show()
 
 def parseGenerations(line):
@@ -50,8 +50,7 @@ def parseGenerations(line):
     """
     generations = re.match(".*Eden:\s(\d+.\d+)(\w).*Survivors:\s(\d+.\d+)(\w).*Heap:\s(\d+.\d+)(\w)", line)
     if generations:
-        eden, survivors, heap = round(float(generations.group(1))), round(float(generations.group(3))),
-        round(float(generations.group(5)))
+        eden, survivors, heap = round(float(generations.group(1))), round(float(generations.group(3))), round(float(generations.group(5)))
         print(eden, survivors, heap)
         return eden*units[generations.group(2)], survivors*units[generations.group(4)], heap**units[generations.group(6)]
 
@@ -113,6 +112,9 @@ if len(allocations) > 0:
     print(f"{(mb16/total):.2%} would not be humongous with a 16mb region size")
     print(f"{(mb32/total):.2%} would not be humongous with a 32mb region size")
     print(f"{mbMax/total:.2%} would remain humongous with a 32mb region size")
+
+plotGenerations(szEden, szSurvivors, szHeap)
+plotTimes(timeUser, timeSys, timeReal)
 
 
 #Total created bytes 	1.88 gb
